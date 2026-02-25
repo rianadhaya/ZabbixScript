@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zabbix 7.4 Installation Script</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Fira+Code:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="card">
+        <h1>Zabbix Setup Tool</h1>
+        <p class="subtitle">
+          Salin perintah di bawah ini untuk memulai instalasi Zabbix 7.4 di
+          Debian 12.
+        </p>
+
+        <div class="code-container">
+          <div class="code-wrapper">
+            <code id="command-text"
+              >sudo bash -c "wget
+              https://repo.zabbix.com/zabbix/7.4/release/debian/pool/main/z/zabbix-release/zabbix-release_latest_7.4+debian12_all.deb
+              && dpkg -i zabbix-release_latest_7.4+debian12_all.deb && apt
+              update && DEBIAN_FRONTEND=noninteractive apt -y install
+              zabbix-server-mysql zabbix-frontend-php zabbix-apache-conf
+              zabbix-sql-scripts zabbix-agent mariadb-server && mysql -uroot -e
+              \"CREATE DATABASE zabbix CHARACTER SET utf8mb4 COLLATE
+              utf8mb4_bin; CREATE USER 'zabbix'@'localhost' IDENTIFIED BY
+              'password'; GRANT ALL PRIVILEGES ON zabbix.* TO
+              'zabbix'@'localhost'; SET GLOBAL log_bin_trust_function_creators =
+              1;\" && zcat /usr/share/zabbix/sql-scripts/mysql/server.sql.gz |
+              mysql --default-character-set=utf8mb4 -uzabbix -ppassword zabbix
+              && mysql -uroot -e \"SET GLOBAL log_bin_trust_function_creators =
+              0;\" && sed -i \"s/^# DBPassword=.*/DBPassword=password/\"
+              /etc/zabbix/zabbix_server.conf && systemctl restart zabbix-server
+              zabbix-agent apache2 && systemctl enable zabbix-server
+              zabbix-agent apache2"</code
+            >
+          </div>
+        </div>
+
+        <button class="copy-button" id="copy-btn">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+            />
+          </svg>
+          <span id="btn-text">Salin Perintah</span>
+        </button>
+
+        <div class="footer">
+          <p>
+            Dokumentasi Resmi:
+            <a href="https://www.zabbix.com/download" target="_blank"
+              >Zabbix Download</a
+            >
+          </p>
+        </div>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
