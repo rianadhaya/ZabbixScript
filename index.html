@@ -24,23 +24,7 @@
         <div class="code-container">
           <div class="code-wrapper">
             <code id="command-text"
-              >sudo bash -c "wget
-              https://repo.zabbix.com/zabbix/7.4/release/debian/pool/main/z/zabbix-release/zabbix-release_latest_7.4+debian12_all.deb
-              && dpkg -i zabbix-release_latest_7.4+debian12_all.deb && apt
-              update && DEBIAN_FRONTEND=noninteractive apt -y install
-              zabbix-server-mysql zabbix-frontend-php zabbix-apache-conf
-              zabbix-sql-scripts zabbix-agent mariadb-server && mysql -uroot -e
-              \"CREATE DATABASE zabbix CHARACTER SET utf8mb4 COLLATE
-              utf8mb4_bin; CREATE USER 'zabbix'@'localhost' IDENTIFIED BY
-              'password'; GRANT ALL PRIVILEGES ON zabbix.* TO
-              'zabbix'@'localhost'; SET GLOBAL log_bin_trust_function_creators =
-              1;\" && zcat /usr/share/zabbix/sql-scripts/mysql/server.sql.gz |
-              mysql --default-character-set=utf8mb4 -uzabbix -ppassword zabbix
-              && mysql -uroot -e \"SET GLOBAL log_bin_trust_function_creators =
-              0;\" && sed -i \"s/^# DBPassword=.*/DBPassword=password/\"
-              /etc/zabbix/zabbix_server.conf && systemctl restart zabbix-server
-              zabbix-agent apache2 && systemctl enable zabbix-server
-              zabbix-agent apache2"</code
+              >sudo bash -c "wget https://repo.zabbix.com/zabbix/7.4/release/debian/pool/main/z/zabbix-release/zabbix-release_latest_7.4+debian12_all.deb && dpkg -i zabbix-release_latest_7.4+debian12_all.deb && apt update && DEBIAN_FRONTEND=noninteractive apt -y install zabbix-server-mysql zabbix-frontend-php zabbix-apache-conf zabbix-sql-scripts zabbix-agent mariadb-server && mysql -uroot -e \"CREATE DATABASE zabbix CHARACTER SET utf8mb4 COLLATE utf8mb4_bin; CREATE USER 'zabbix'@'localhost' IDENTIFIED BY 'password'; GRANT ALL PRIVILEGES ON zabbix.* TO 'zabbix'@'localhost'; SET GLOBAL log_bin_trust_function_creators = 1;\" && zcat /usr/share/zabbix/sql-scripts/mysql/server.sql.gz | mysql --default-character-set=utf8mb4 -uzabbix -ppassword zabbix && mysql -uroot -e \"SET GLOBAL log_bin_trust_function_creators = 0;\" && sed -i \"s/^# DBPassword=.*/DBPassword=password/\" /etc/zabbix/zabbix_server.conf && systemctl restart zabbix-server zabbix-agent apache2 && systemctl enable zabbix-server zabbix-agent apache2"</code
             >
           </div>
         </div>
@@ -72,6 +56,51 @@
         </div>
       </div>
     </div>
+
+       <div class="container">
+      <div class="card">
+        <h1>OpenSSL Installation</h1>
+        <p class="subtitle">
+          Salin perintah di bawah ini untuk memulai instalasi OpenSSL di
+          Debian 12.
+        </p>
+
+        <div class="code-container">
+          <div class="code-wrapper">
+            <code id="command-text"
+              >apt update && apt install -y apache2 openssl ssl-cert && cd /etc/apache2/sites-available && cp default-ssl.conf webssl.conf && sed -i 's|SSLCertificateFile.*|SSLCertificateFile /etc/apache2/ssl/apache.crt|g' webssl.conf && sed -i 's|SSLCertificateKeyFile.*|SSLCertificateKeyFile /etc/apache2/ssl/apache.key|g' webssl.conf && mkdir -p /etc/apache2/ssl && openssl req -x509 -newkey rsa:4096 -keyout /etc/apache2/ssl/apache.key -out /etc/apache2/ssl/apache.crt -nodes -days 365 -subj "/C=ID/ST=Jakarta/L=Jakarta/O=MyOrg/OU=IT/CN=localhost" && /usr/sbin/a2dissite 000-default.conf && /usr/sbin/a2ensite webssl.conf && /usr/sbin/a2enmod ssl && systemctl restart apache2 && systemctl reload apache2</code
+            >
+          </div>
+        </div>
+
+        <button class="copy-button" id="copy-btn">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+            />
+          </svg>
+          <span id="btn-text">Salin Perintah</span>
+        </button>
+
+        <div class="footer">
+          <p>
+            Dokumentasi Resmi:
+            <a href="https://rafimf.gitlab.io/notes/network/linux/konfigurasi-webserver-apache-https-debian/" target="_blank"
+              >Konfigurasi Webserver Apache HTTPS Debian</a
+            >
+          </p>
+        </div>
+      </div>
+    </div>
+
     <script src="script.js"></script>
   </body>
 </html>
